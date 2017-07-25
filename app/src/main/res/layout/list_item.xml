@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout for a single list item in the list of pets -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#2B3D4D"  />
+
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="#AEB6BD"  />
+    <TextView
+        android:id="@+id/game_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="#AEB6BD"  /></LinearLayout>
+
+    <ImageView
+        android:id="@+id/game_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_centerHorizontal="true"/>
+
+
+    <TextView
+        android:id="@+id/genre"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#2B3D4D"  />
+
+    <TextView
+        android:id="@+id/console"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/genre"
+        android:padding="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textColor="#AEB6BD"  />
+
+    <ImageView
+        android:id="@+id/action_sale_by_one"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/console"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="click_me"
+        android:src="@drawable/ic_action_cart" />
+
+</RelativeLayout>
