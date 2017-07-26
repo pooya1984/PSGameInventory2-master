@@ -25,7 +25,6 @@ public class GameDbHelper extends SQLiteOpenHelper {
         this.context=context;
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         //update new column

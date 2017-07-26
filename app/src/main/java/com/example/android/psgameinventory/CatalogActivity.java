@@ -23,12 +23,15 @@ import com.example.android.psgameinventory.data.GameContract.GameEntry;
 public class CatalogActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the pet data loader */
+    /**
+     * Identifier for the pet data loader
+     */
     private static final int GAME_LOADER = 0;
 
-    /** Adapter for the ListView */
+    /**
+     * Adapter for the ListView
+     */
     GameCursorAdapter mCursorAdapter;
-
 
 
     @Override
@@ -72,16 +75,16 @@ public class CatalogActivity extends AppCompatActivity implements
         ContentValues values = new ContentValues();
         values.put(GameEntry.COLUMN_GAME_NAME, "The Last Of Us");
         values.put(GameEntry.COLUMN_GAME_STOCK, 7);
-        values.put(GameEntry.COLUMN_GAME_PRICE,20);
-        values.put(GameEntry.COLUMN_GAME_GENRE,GameEntry.GENRE_ADVENTURE);
+        values.put(GameEntry.COLUMN_GAME_PRICE, 20);
+        values.put(GameEntry.COLUMN_GAME_GENRE, GameEntry.GENRE_ADVENTURE);
         values.put(GameEntry.COLUMN_GAME_CONSOLE, GameEntry.CONSOLE_PS4);
         values.put(GameEntry.COLUMN_GAME_IMAGE, "no image");
-
 
 
         getContentResolver().insert(GameEntry.CONTENT_URI, values);
 
     }
+
     private void deleteAllGames() {
         int rowsDeleted = getContentResolver().delete(GameEntry.CONTENT_URI, null, null);
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from game database");
@@ -121,7 +124,7 @@ public class CatalogActivity extends AppCompatActivity implements
                 GameEntry.COLUMN_GAME_NAME,
                 GameEntry.COLUMN_GAME_PRICE,
                 GameEntry.COLUMN_GAME_STOCK,
-                GameEntry.COLUMN_GAME_IMAGE };
+                GameEntry.COLUMN_GAME_IMAGE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -142,4 +145,5 @@ public class CatalogActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
-    }}
+    }
+}

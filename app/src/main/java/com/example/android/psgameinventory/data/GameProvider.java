@@ -18,6 +18,7 @@ public class GameProvider extends ContentProvider {
     private static final int GAME_ID = 101;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
     static {
         sUriMatcher.addURI(GameContract.CONTENT_AUTHORITY, GameContract.PATH_GAMES, GAMES);
         sUriMatcher.addURI(GameContract.CONTENT_AUTHORITY, GameContract.PATH_GAMES + "/#", GAME_ID);
@@ -48,7 +49,7 @@ public class GameProvider extends ContentProvider {
             case GAME_ID:
 
                 selection = GameContract.GameEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = database.query(GameEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -127,7 +128,7 @@ public class GameProvider extends ContentProvider {
                 return updateGame(uri, contentValues, selection, selectionArgs);
             case GAME_ID:
                 selection = GameEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateGame(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -199,7 +200,7 @@ public class GameProvider extends ContentProvider {
                 break;
             case GAME_ID:
                 selection = GameEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:

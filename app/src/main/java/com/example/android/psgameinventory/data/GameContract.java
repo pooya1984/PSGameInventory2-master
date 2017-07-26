@@ -11,29 +11,19 @@ public final class GameContract {
 
     private GameContract() {}
 
-
-
     public static final String CONTENT_AUTHORITY = "com.example.android.games";
     public static final String PATH_GAMES = "games";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-
-
     public static final class GameEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_GAMES);
-
         public static final String CONTENT_LIST_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GAMES;
-
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GAMES;
-
         /** Name of database table for games */
         public final static String TABLE_NAME = "games";
-
-
-
         /**
          * Unique ID number for the game (only for use in the database table).
          *
@@ -84,7 +74,6 @@ public final class GameContract {
         public static final int CONSOLE_PS2 = 3;
         public static final int CONSOLE_PS3 = 4;
         public static final int CONSOLE_PS4 = 5;
-
 
         public static boolean isValidConsole(int console) {
             if (console == CONSOLE_UNKNOWN ||

@@ -295,19 +295,6 @@ public class EditorActivity extends AppCompatActivity implements
 
     }
 
-    Boolean loadImageFromDB() {
-        try {
-            dbHelper.open();
-            byte[] bytes = dbHelper.retreiveImageFromDB();
-            dbHelper.close();
-            // Show Image from DB in ImageView
-            mImageView.setImageBitmap(Utils.getImage(bytes));
-            return true;
-        } catch (Exception e) {
-            dbHelper.close();
-            return false;
-        }
-    }
     private void saveGame() {
         String nameString = mNameEditText.getText().toString().trim();
         String quantityString = mQuantity.getText().toString().trim();
@@ -371,7 +358,7 @@ public class EditorActivity extends AppCompatActivity implements
 
         if (quantity < 1) {
             // Show an error message as a toast
-            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You cannot have less than 1 game", Toast.LENGTH_SHORT).show();
             // Exit this method early because there's nothing left to do
             return;
         }
@@ -589,7 +576,6 @@ public class EditorActivity extends AppCompatActivity implements
 
         if (cursor.moveToFirst()) {
 
-
             int nameColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME);
             int genreColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_GENRE);
             int consoleColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_CONSOLE);
@@ -719,7 +705,6 @@ public class EditorActivity extends AppCompatActivity implements
         }
         finish();
     }
-
 
     /**
      * This method displays the given quantity value on the screen.
