@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.psgameinventory.data.GameContract.GameEntry;
+import com.example.android.psgameinventory.data.GameDbHelper;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -52,7 +53,6 @@ public class EditorActivity extends AppCompatActivity implements
 
     private static final String LOG_TAG = CatalogActivity.class.getSimpleName();
     private static final int PICK_IMAGE_REQUEST = 0;
-    private Uri myUri;
 
     private static final int EXISTING_GAME_LOADER = 0;
 
@@ -112,6 +112,9 @@ public class EditorActivity extends AppCompatActivity implements
             return false;
         }
     };
+    private GameDbHelper dbHelper;
+    private byte[] imageBytes;
+    private Uri selectedImageUri;
 
 
     @Override
@@ -120,7 +123,7 @@ public class EditorActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_editor);
 
 
-        mImageView = (ImageView) findViewById(R.id.product_photo);
+        mImageView = (ImageView) findViewById(R.id.game_image);
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,6 +167,10 @@ public class EditorActivity extends AppCompatActivity implements
 
         setupSpinner();
         requestPermissions();
+
+
+        // Create the Database helper object
+        dbHelper = new GameDbHelper(this);
     }
 
     /**
@@ -236,6 +243,8 @@ public class EditorActivity extends AppCompatActivity implements
         });
     }
 
+
+
     private boolean isGalleryPicture = false;
 
     @Override
@@ -251,10 +260,12 @@ public class EditorActivity extends AppCompatActivity implements
             // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
 
             if (resultData != null) {
-                myUri = resultData.getData();
-                Log.i(LOG_TAG, "Uri: " + myUri.toString());
+                selectedImageUri = resultData.getData();
+                Log.i(LOG_TAG, "Uri: " + selectedImageUri.toString());
 
-                mBitmap = getBitmapFromUri(myUri);
+                imageBytes = getImageBytes(selectedImageUri);
+
+                mBitmap = getBitmapFromUri(selectedImageUri);
                 mImageView.setImageBitmap(mBitmap);
 
                 isGalleryPicture = true;
@@ -262,11 +273,45 @@ public class EditorActivity extends AppCompatActivity implements
         }
     }
 
+    // Save the
+    Boolean saveImageInDB(Uri selectedImageUri, int _id) {
+
+        dbHelper.open();
+        byte[] inputData = getImageBytes(selectedImageUri);
+        dbHelper.updateImage(inputData, _id);
+        dbHelper.close();
+        return true;
+
+
+    }
+
+    private byte[] getImageBytes(Uri selectedImageUri) {
+        try {
+            return Utils.getBytes(getContentResolver().openInputStream(selectedImageUri));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    Boolean loadImageFromDB() {
+        try {
+            dbHelper.open();
+            byte[] bytes = dbHelper.retreiveImageFromDB();
+            dbHelper.close();
+            // Show Image from DB in ImageView
+            mImageView.setImageBitmap(Utils.getImage(bytes));
+            return true;
+        } catch (Exception e) {
+            dbHelper.close();
+            return false;
+        }
+    }
     private void saveGame() {
         String nameString = mNameEditText.getText().toString().trim();
         String quantityString = mQuantity.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
-        mUri = String.valueOf(myUri);
 
 
 
@@ -284,7 +329,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(GameEntry.COLUMN_GAME_GENRE, mGenre);
         values.put(GameEntry.COLUMN_GAME_CONSOLE, mConsole);
         values.put(GameEntry.COLUMN_GAME_PRICE, priceString);
-        values.put(GameEntry.COLUMN_GAME_IMAGE, mUri);
+        values.put(GameEntry.COLUMN_GAME_IMAGE, imageBytes);
         values.put(GameEntry.COLUMN_GAME_STOCK, quantity);
 
 
@@ -408,7 +453,7 @@ public class EditorActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable("picUri", myUri);
+        outState.putParcelable("picUri", selectedImageUri);
     }
 
     // Recover the saved state when the activity is recreated.
@@ -416,7 +461,7 @@ public class EditorActivity extends AppCompatActivity implements
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        myUri = savedInstanceState.getParcelable("picUri");
+        selectedImageUri = savedInstanceState.getParcelable("picUri");
     }
 
 
@@ -550,6 +595,7 @@ public class EditorActivity extends AppCompatActivity implements
             int consoleColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_CONSOLE);
             int quantityColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_STOCK);
             int priceColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PRICE);
+            int imageColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_IMAGE);
 
             String name = cursor.getString(nameColumnIndex);
             int genre = cursor.getInt(genreColumnIndex);
@@ -557,12 +603,14 @@ public class EditorActivity extends AppCompatActivity implements
             int quantity = cursor.getInt(quantityColumnIndex);
             String price = cursor.getString(priceColumnIndex);
 
+            imageBytes = cursor.getBlob(imageColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mQuantity.setText(Integer.toString(quantity));
             mPriceEditText.setText(price);
-            mImageView.setImageURI(Uri.parse(mUri));
+
+            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
 
 
             switch (console) {
@@ -612,7 +660,7 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantity.setText("");
         mPriceEditText.setText("");
         mConsoleSpinner.setSelection(0); // Select "Unknown" console
-        mImageView.setImageURI(myUri);
+        mImageView.setImageURI(selectedImageUri);
 
     }
 

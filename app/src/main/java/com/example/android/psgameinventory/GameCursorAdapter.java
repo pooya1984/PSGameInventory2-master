@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,9 @@ import android.widget.Toast;
 
 import com.example.android.psgameinventory.data.GameContract.GameEntry;
 
-import static android.R.attr.id;
 import static android.content.ContentValues.TAG;
 import static com.example.android.psgameinventory.R.id.console;
+import static com.example.android.psgameinventory.R.id.game_image;
 import static com.example.android.psgameinventory.R.id.game_price;
 
 public class GameCursorAdapter extends CursorAdapter {
@@ -33,14 +34,16 @@ public class GameCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
         TextView genreTextView = (TextView) view.findViewById(R.id.genre);
         TextView consoleTextView = (TextView) view.findViewById(console);
         TextView priceTextView = (TextView) view.findViewById(game_price);
-        ImageView btn = (ImageView)view.findViewById(R.id.action_sale_by_one);
+        ImageView mImageView = (ImageView) view.findViewById(game_image);
+
+        ImageView btn = (ImageView) view.findViewById(R.id.action_sale_by_one);
 
 
         // Find the columns of pet attributes that we're interested in
@@ -50,9 +53,13 @@ public class GameCursorAdapter extends CursorAdapter {
         int genreColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_GENRE);
         int consoleColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_CONSOLE);
 
+        final int id = cursor.getInt(cursor.getColumnIndex(GameEntry._ID));
         final Uri currentProductUri = ContentUris.withAppendedId(GameEntry.CONTENT_URI, id);
         context.getContentResolver().notifyChange(currentProductUri, null);
 
+        int imageColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_IMAGE);
+        byte[] imageBytes = cursor.getBlob(imageColumnIndex);
+        mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
 
         // Read the pet attributes from the Cursor for the current pet
         String gameName = cursor.getString(nameColumnIndex);
@@ -119,8 +126,13 @@ public class GameCursorAdapter extends CursorAdapter {
                     int qq = gameStock;
                     Log.d(TAG, "new quabtity= " + qq);
                     values.put(GameEntry.COLUMN_GAME_STOCK, --qq);
+                    Log.d(TAG, "gameStock= " + cursor.getInt(gameColumnIndex));
+
+
                     Uri uri = ContentUris.withAppendedId(GameEntry.CONTENT_URI, id);
                     context.getContentResolver().update(uri, values, null, null);
+                    Log.d(TAG, "gameStock= " + cursor.getInt(gameColumnIndex));
+
                     context.getContentResolver().notifyChange(currentProductUri, null);
                     return;
                 } else {

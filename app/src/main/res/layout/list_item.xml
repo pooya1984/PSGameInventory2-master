@@ -62,7 +62,6 @@
         android:layout_below="@id/console"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="click_me"
         android:src="@drawable/ic_action_cart" />
 
 </RelativeLayout>

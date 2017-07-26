@@ -83,7 +83,7 @@
                 android:layout_marginLeft="16dp"
                 android:inputType="number"
                 android:paddingTop="16dp"
-                android:text="Price"
+                android:hint="Price"
                 android:textAllCaps="true"
                 android:textStyle="bold" />
 
@@ -163,7 +163,7 @@
             android:text="@string/photo_heading" />
 
         <ImageView
-            android:id="@+id/product_photo"
+            android:id="@+id/game_image"
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:layout_below="@id/heading_photo"

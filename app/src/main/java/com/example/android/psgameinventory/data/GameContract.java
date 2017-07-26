@@ -35,7 +35,7 @@ public final class GameContract {
 
 
         /**
-         * Unique ID number for the pet (only for use in the database table).
+         * Unique ID number for the game (only for use in the database table).
          *
          * Type: INTEGER
          */
@@ -46,7 +46,7 @@ public final class GameContract {
         public final static String COLUMN_GAME_IMAGE = "IMAGE";
 
         /**
-         * Gender of the console.
+         * Gender and console.
          * Type: INTEGER
          */
         public final static String COLUMN_GAME_GENRE = "genre";
