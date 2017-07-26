@@ -6,7 +6,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/activity_margin">
+
+    <ImageView
+        android:id="@+id/game_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_centerHorizontal="true"/>
+
 <LinearLayout
+    android:layout_below="@id/game_image"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -28,16 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD"  /></LinearLayout>
-
-    <ImageView
-        android:id="@+id/game_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"
-        android:layout_centerHorizontal="true"/>
-
-
+        android:textColor="#AEB6BD"  />
     <TextView
         android:id="@+id/genre"
         android:layout_alignParentRight="true"
@@ -54,12 +54,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:textColor="#AEB6BD"  />
+        android:textColor="#AEB6BD"  /></LinearLayout>
+
+
+
+
+
 
     <ImageView
+
         android:id="@+id/action_sale_by_one"
+        android:focusable="false"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/console"
+        android:layout_below="@id/game_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_cart" />
