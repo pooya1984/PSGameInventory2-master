@@ -7,16 +7,17 @@
 
     <ImageView
         android:id="@+id/game_image"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitCenter"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
         android:src="@drawable/ps_logo" />
 
     <LinearLayout
+        android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/game_image"
+        android:layout_toRightOf="@id/game_image"
         android:orientation="vertical">
 
         <TextView
@@ -59,16 +60,7 @@
             android:textColor="#AEB6BD" />
     </LinearLayout>
 
-        <ImageView
-            android:layout_below="@id/game_image"
-            android:id="@+id/order_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:focusable="false"
-            android:src="@drawable/ic_action_gmail"
-            android:text="order"
-            android:textColor="@android:color/holo_blue_dark" />
+
 
         <ImageView
 
@@ -76,7 +68,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/order_button"
             android:layout_marginTop="16dp"
             android:focusable="false"
             android:src="@drawable/ic_action_cart" />

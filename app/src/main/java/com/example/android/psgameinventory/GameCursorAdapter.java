@@ -3,7 +3,6 @@ package com.example.android.psgameinventory;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -45,7 +44,6 @@ public class GameCursorAdapter extends CursorAdapter {
         ImageView mImageView = (ImageView) view.findViewById(game_image);
 
         ImageView btn = (ImageView) view.findViewById(R.id.action_sale_by_one);
-        ImageView btn2 = (ImageView) view.findViewById(R.id.order_button);
 
 
         // Find the columns of pet attributes that we're interested in
@@ -61,11 +59,11 @@ public class GameCursorAdapter extends CursorAdapter {
 
         int imageColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_IMAGE);
         byte[] imageBytes = cursor.getBlob(imageColumnIndex);
-        if(imageBytes != null){
+        if (imageBytes != null) {
             mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-        }else{
-            mImageView.setImageResource(R.drawable.ps_logo);}
-
+        } else {
+            mImageView.setImageResource(R.drawable.ps_logo);
+        }
         // Read the pet attributes from the Cursor for the current pet
         final String gameName = cursor.getString(nameColumnIndex);
         final int gameStock = cursor.getInt(gameColumnIndex);
@@ -75,7 +73,6 @@ public class GameCursorAdapter extends CursorAdapter {
 
         String GenreString = "";
         String ConsoleString = "";
-
 
         switch (Integer.parseInt(genre)) {
             case 1:
@@ -112,7 +109,6 @@ public class GameCursorAdapter extends CursorAdapter {
                 GenreString = context.getString(R.string.PS4);
                 break;
         }
-
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(gameName);
 
@@ -144,16 +140,8 @@ public class GameCursorAdapter extends CursorAdapter {
                     Toast.makeText(context, "Item out of stock", Toast.LENGTH_SHORT).show();
                 }
                 context.getContentResolver().notifyChange(GameEntry.CONTENT_URI, null);
-            }
-        });
 
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                intent.putExtra(Intent.EXTRA_SUBJECT, "PS Game Inventory ordered for " + gameName);
-                intent.putExtra(Intent.EXTRA_SUBJECT, gamePrice);
+
             }
         });
     }

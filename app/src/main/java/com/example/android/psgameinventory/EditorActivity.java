@@ -43,62 +43,49 @@ import com.example.android.psgameinventory.data.GameDbHelper;
 import java.io.FileDescriptor;
 import java.io.IOException;
 
+import static com.example.android.psgameinventory.R.string.PS;
+
 
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     int quantity = 0;
     private static final int MY_PERMISSIONS_REQUEST = 2;
-
-
     private static final String LOG_TAG = CatalogActivity.class.getSimpleName();
     private static final int PICK_IMAGE_REQUEST = 0;
-
     private static final int EXISTING_GAME_LOADER = 0;
-
     /**
      * ImageView field to enter the game's image
      */
     private ImageView mImageView;
-
     private Bitmap mBitmap;
-
     private String mUri = "noimages";
-
     /**
      * Content URI for the existing game (null if it's a new game)
      */
     private Uri mCurrentGAMEUri;
-
     /**
      * EditText field to enter the game's name
      */
     private EditText mNameEditText;
-
     /**
      * EditText field to enter the game's console
      */
     private Spinner mConsoleSpinner;
-
     /**
      * TextView field to enter the game's quantity
      */
     private TextView mQuantity;
-
     /**
      * TextView field to enter the game's quantity
      */
     private EditText mPriceEditText;
-
     /**
      * EditText field to enter the game's genre
      */
     private Spinner mGenreSpinner;
-
     private int mConsole = GameEntry.CONSOLE_UNKNOWN;
-
     private int mGenre = GameEntry.GENRE_UNKNOWN;
-
     /**
      * Boolean flag that keeps track of whether the game has been edited (true) or not (false)
      */
@@ -116,12 +103,10 @@ public class EditorActivity extends AppCompatActivity implements
     private byte[] imageBytes;
     private Uri selectedImageUri;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-
 
         mImageView = (ImageView) findViewById(R.id.game_image);
         mImageView.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +125,6 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
-
         Intent intent = getIntent();
         mCurrentGAMEUri = intent.getData();
 
@@ -151,8 +135,6 @@ public class EditorActivity extends AppCompatActivity implements
             setTitle(getString(R.string.editor_activity_title_edit_game));
             getLoaderManager().initLoader(EXISTING_GAME_LOADER, null, this);
         }
-
-
         mNameEditText = (EditText) findViewById(R.id.edit_game_name);
         mConsoleSpinner = (Spinner) findViewById(R.id.spinner_console);
         mQuantity = (TextView) findViewById(R.id.edit_game_quantity);
@@ -167,7 +149,6 @@ public class EditorActivity extends AppCompatActivity implements
 
         setupSpinner();
         requestPermissions();
-
 
         // Create the Database helper object
         dbHelper = new GameDbHelper(this);
@@ -220,7 +201,7 @@ public class EditorActivity extends AppCompatActivity implements
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals(getString(R.string.PS))) {
+                    if (selection.equals(getString(PS))) {
                         mConsole = GameEntry.CONSOLE_PS;
                     } else if (selection.equals(getString(R.string.PS1))) {
                         mConsole = GameEntry.CONSOLE_PS1;
@@ -242,8 +223,6 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
     }
-
-
 
     private boolean isGalleryPicture = false;
 
@@ -301,7 +280,6 @@ public class EditorActivity extends AppCompatActivity implements
         String priceString = mPriceEditText.getText().toString().trim();
 
 
-
         if (mCurrentGAMEUri == null &&
                 TextUtils.isEmpty(nameString) || TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(priceString) &&
                 mGenre == GameEntry.GENRE_UNKNOWN && mConsole == GameEntry.CONSOLE_UNKNOWN) {
@@ -318,7 +296,6 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(GameEntry.COLUMN_GAME_PRICE, priceString);
         values.put(GameEntry.COLUMN_GAME_IMAGE, imageBytes);
         values.put(GameEntry.COLUMN_GAME_STOCK, quantity);
-
 
 
         // Determine if this is a new or existing pet by checking if mCurrentGAMEUri is null or not
@@ -511,7 +488,21 @@ public class EditorActivity extends AppCompatActivity implements
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
                 return true;
+            case R.id.action_sale:
+                String name = mNameEditText.getText().toString();
+                String price = mPriceEditText.getText().toString();
 
+                final String email = "Product Name = " + name
+                        + "\nPrice = " + price;
+
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                intent.putExtra(Intent.EXTRA_SUBJECT, ("PSGAMEINVENTORY,you order this game"));
+                intent.putExtra(Intent.EXTRA_TEXT, email);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                return true;
             case android.R.id.home:
                 if (!mGameHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
@@ -596,10 +587,11 @@ public class EditorActivity extends AppCompatActivity implements
             mQuantity.setText(Integer.toString(quantity));
             mPriceEditText.setText(price);
 
-            if(imageBytes != null){
+            if (imageBytes != null) {
                 mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-            }else{
-                mImageView.setImageResource(R.drawable.ps_logo);}
+            } else {
+                mImageView.setImageResource(R.mipmap.ic_launcher);
+            }
 
             switch (console) {
                 case GameEntry.CONSOLE_PS:
@@ -670,7 +662,6 @@ public class EditorActivity extends AppCompatActivity implements
         alertDialog.show();
     }
 
-
     private void showDeleteConfirmationDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -691,7 +682,6 @@ public class EditorActivity extends AppCompatActivity implements
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
 
     private void deleteGame() {
         if (mCurrentGAMEUri != null) {
