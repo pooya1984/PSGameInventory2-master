@@ -61,7 +61,10 @@ public class GameCursorAdapter extends CursorAdapter {
 
         int imageColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_IMAGE);
         byte[] imageBytes = cursor.getBlob(imageColumnIndex);
-        mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+        if(imageBytes != null){
+            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+        }else{
+            mImageView.setImageResource(R.drawable.ps_logo);}
 
         // Read the pet attributes from the Cursor for the current pet
         final String gameName = cursor.getString(nameColumnIndex);

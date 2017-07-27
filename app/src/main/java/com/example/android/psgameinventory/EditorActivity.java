@@ -596,8 +596,10 @@ public class EditorActivity extends AppCompatActivity implements
             mQuantity.setText(Integer.toString(quantity));
             mPriceEditText.setText(price);
 
-            mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-
+            if(imageBytes != null){
+                mImageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+            }else{
+                mImageView.setImageResource(R.drawable.ps_logo);}
 
             switch (console) {
                 case GameEntry.CONSOLE_PS:
