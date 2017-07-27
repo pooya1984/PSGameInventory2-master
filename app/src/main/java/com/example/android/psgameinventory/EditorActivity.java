@@ -318,6 +318,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        finish();
     }
 
     public void increment(View view) {
@@ -483,7 +484,6 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_save:
                 saveGame();
-                finish();
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
